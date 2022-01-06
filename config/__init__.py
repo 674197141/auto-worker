@@ -11,23 +11,14 @@ config_dc = {}
 class Web:
     port = 8080
 
-class Mail:
-
-    user = ''
-    password = ''
-    host = ''
-
-    def __init__(self):
-        config = ConfigParser()
-        config.read(local_file('mail.conf'), encoding='UTF-8')
-        mail = config['mail']
-        self.user = mail.get('user')
-        self.password = mail.get('password')
-        self.host = mail.get('host')
 
 def init_config():
-    config_dc['mail'] = Mail()
     config_dc['web'] = Web()
+    config = ConfigParser()
+    config.read(local_file('config.conf'), encoding='UTF-8')
+    config_dc['base'] = config['base']
+    config_dc['weather'] = config['weather']
+    config_dc['mail'] = config['mail']
 
 
 def get_config(config_name):

@@ -5,12 +5,11 @@ from config import get_config
 class Mail:
 
     def __init__(self):
-        config = get_config('mail')
-        self.user = config.user
-        self.password = config.password
-        self.host = config.host
-        self.yag = yagmail.SMTP(
-            user=mail.user, password=mail.password, host=mail.host)
+        mail = get_config('mail')
+        self.user = mail.get('user')
+        self.password = mail.get('password')
+        self.host = mail.get('host')
+
 
     @staticmethod
     def create_mail():
