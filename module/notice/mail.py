@@ -21,8 +21,3 @@ class Mail:
             user=self.user, password=self.password, host=self.host)
         yag.send(to=to, subject=title,
                  contents=contents)
-
-
-if __name__ == '__main__':
-    mail = Mail.create_mail()
-    mail.send()
