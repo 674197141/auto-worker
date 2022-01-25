@@ -64,7 +64,7 @@ not_state = ['live', 'canceled']
 
 def get_orders():
     # 更新订单数据
-    del_list = []
+    add_list = []
     for instId, orderId in order_dc.items():
         for ordId in orderId:
             path = Api_Trade_Order+"?ordId=" + \
@@ -77,8 +77,8 @@ def get_orders():
                 instId=instId, px=data['px'], state=data['state'])
             logger.info(log)
             if data['state'] in not_state:
+                add_list.append([instId, orderId])
                 continue
-            del_list.append([instId, orderId])
             title = '欧易 合约订单触发通知'
             text = '''
                 合约类型: {instId}
@@ -86,8 +86,11 @@ def get_orders():
             '''.format(instId=instId, px=data['px'])
             mail = Mail.create_mail()
             mail.send(to_mail, title, text)
-    for del_ord in del_list:
-        order_dc[del_ord[0]].remove(del_ord[1])
+    order_dc.clear()
+    for add in add_list:
+        if not add in order_dc:
+            order_dc[add[0]] = []
+        order_dc[add[0]].append(add[1])
 
 
 def watch_contract_order():
@@ -100,7 +103,7 @@ def watch_contract_order():
 watch_contract_order()
 
 scheduler.add_job(
-	watch_contract_order,
-	trigger='interval',
-	minutes=2,
+    watch_contract_order,
+    trigger='interval',
+    minutes=2,
 )

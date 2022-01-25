@@ -1,0 +1,8 @@
+version: '3'
+services:
+
+  watch_dog:
+    build: .
+    volumes:
+    - /home/auto-worker:/usr/src/app
+
