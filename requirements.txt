@@ -31,3 +31,4 @@ Werkzeug==2.0.2
 yagmail==0.14.260
 zipp==3.7.0
 loguru
+sqlalchemy

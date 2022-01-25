@@ -19,10 +19,12 @@ def init_config():
     config_dc['base'] = config['base']
     config_dc['weather'] = config['weather']
     config_dc['mail'] = config['mail']
+    config_dc['okx'] = config['okx']
 
 
 def get_config(config_name):
     return config_dc[config_name]
+
 
 
 if __name__ == '__main__':
