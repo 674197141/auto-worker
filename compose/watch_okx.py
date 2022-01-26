@@ -46,6 +46,7 @@ order_dc = {}
 
 
 def get_order_need_update():
+    global order_dc
     # 需要更新的订单数据
     path = Api_Trade_Orders_Pending
     url = get_url(path)
@@ -63,6 +64,7 @@ not_state = ['live', 'canceled']
 
 
 def get_orders():
+    global order_dc
     # 更新订单数据
     add_list = []
     for instId, orderId in order_dc.items():
@@ -77,7 +79,7 @@ def get_orders():
                 instId=instId, px=data['px'], state=data['state'])
             logger.info(log)
             if data['state'] in not_state:
-                add_list.append([instId, orderId])
+                add_list.append([instId, ordId])
                 continue
             title = '欧易 合约订单触发通知'
             text = '''
@@ -88,11 +90,11 @@ def get_orders():
             mail.send(to_mail, title, text)
     order_dc.clear()
     for add in add_list:
-        if not add in order_dc:
+        if not add[0] in order_dc:
             order_dc[add[0]] = []
         order_dc[add[0]].append(add[1])
 
-
+@scheduler.scheduled_job('interval', id='watch_contract_order', minutes=2)
 def watch_contract_order():
     # 合约订单监控
     logger.info('========运行欧易合约监控========')
@@ -101,9 +103,3 @@ def watch_contract_order():
 
 
 watch_contract_order()
-
-scheduler.add_job(
-    watch_contract_order,
-    trigger='interval',
-    minutes=2,
-)

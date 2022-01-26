@@ -8,13 +8,13 @@ jobstores = {
 }
 
 executors = {
-    'default': ThreadPoolExecutor(20),
-    'processpool': ProcessPoolExecutor(5)
+    'default': ThreadPoolExecutor(1),
+    'processpool': ProcessPoolExecutor(1)
 }
 
 job_defaults = {
     'coalesce': False,
-    'max_instances': 3
+    'max_instances': 2
 }
 
 scheduler = BackgroundScheduler(jobstores=jobstores, executors=executors, job_defaults=job_defaults, timezone=utc)
